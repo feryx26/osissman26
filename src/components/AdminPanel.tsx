@@ -16,7 +16,6 @@ import {
   CheckCircle2,
   AlertTriangle,
   RotateCcw,
-  Zap,
   BarChart3,
   Users,
   UserCog,
@@ -31,7 +30,6 @@ import {
   resetAllData,
   addStudent,
   deleteCandidate,
-  simulateRandomVote,
   generateRandomToken,
   playSound
 } from '../services/storageService';
@@ -85,7 +83,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
   // Reset confirmation
   const [showResetConfirm, setShowResetConfirm] = useState(false);
-  const [simMessage, setSimMessage] = useState<string | null>(null);
+  const [resetNote, setResetNote] = useState<{ ok: boolean; text: string } | null>(null);
 
   useEffect(() => {
     const handleAuthChange = () => {
@@ -177,18 +175,6 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
         setSuccessNote(res.message);
         setTimeout(() => setSuccessNote(null), 4000);
       }
-    }
-  };
-
-  const handleSimulateOne = async () => {
-    playSound('click');
-    const res = await simulateRandomVote();
-    if (res.success) {
-      setSimMessage(`Simulasi 1 suara: ${res.studentName} memilih Paslon 0${res.candidateNumber}`);
-      setTimeout(() => setSimMessage(null), 4000);
-    } else {
-      setSimMessage(res.message);
-      setTimeout(() => setSimMessage(null), 4000);
     }
   };
 
@@ -420,7 +406,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
           }`}
         >
           <Lock className="w-4 h-4" />
-          <span>Sesi Pemilihan & Simulasi</span>
+          <span>Sesi Pemilihan</span>
         </button>
       </div>
 
@@ -788,9 +774,9 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
         </div>
       )}
 
-      {/* SUB-TAB 4: PENGATURAN SESI & SIMULASI */}
+      {/* SUB-TAB 4: PENGATURAN SESI */}
       {adminTab === 'pengaturan' && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-6">
           {/* Card 1: Buka Tutup Pemilihan */}
           <div className="bg-white rounded-xl p-5 border border-slate-200/90 shadow-2xs space-y-4">
             <div className="flex items-center justify-between">
@@ -835,30 +821,6 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
             </button>
           </div>
 
-          {/* Card 2: Uji Coba Cepat */}
-          <div className="bg-white rounded-xl p-5 border border-slate-200/90 shadow-2xs space-y-4">
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-bold text-slate-900">Simulasi Pemilih Cepat</h3>
-              <Zap className="w-4 h-4 text-amber-600" />
-            </div>
-
-            <p className="text-xs text-slate-500 leading-relaxed">
-              Kirim suara acak untuk mengamati pergerakan grafik persentase suara real count.
-            </p>
-
-            <div className="pt-2">
-              <button
-                onClick={handleSimulateOne}
-                className="w-full py-2.5 px-3 bg-slate-50 hover:bg-slate-100 text-slate-800 border border-slate-200 rounded-xl text-xs font-semibold transition-colors cursor-pointer"
-              >
-                +1 Suara Simulasi Acak
-              </button>
-            </div>
-            {simMessage && (
-              <p className="text-[11px] text-blue-700 font-medium">{simMessage}</p>
-            )}
-          </div>
-
           {/* Reset Data Danger Zone */}
           <div className="col-span-full bg-white rounded-xl p-5 border border-rose-200 shadow-2xs flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
@@ -880,10 +842,12 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                   Batal
                 </button>
                 <button
-                  onClick={() => {
-                    void resetAllData();
-                    setShowResetConfirm(false);
+                  onClick={async () => {
                     playSound('click');
+                    setShowResetConfirm(false);
+                    const res = await resetAllData();
+                    setResetNote({ ok: res.success, text: res.message });
+                    setTimeout(() => setResetNote(null), 5000);
                   }}
                   className="px-3 py-1.5 text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-lg shadow-2xs transition-colors cursor-pointer"
                 >
@@ -900,6 +864,16 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
               </button>
             )}
           </div>
+
+          {resetNote && (
+            <p
+              className={`col-span-full text-[11px] font-semibold ${
+                resetNote.ok ? 'text-emerald-700' : 'text-rose-700'
+              }`}
+            >
+              {resetNote.text}
+            </p>
+          )}
         </div>
       )}
 

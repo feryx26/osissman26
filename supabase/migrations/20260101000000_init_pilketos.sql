@@ -483,13 +483,21 @@ begin
     return jsonb_build_object('success', false, 'message', 'Akses ditolak: hanya panitia.');
   end if;
 
+  -- Wajib memakai WHERE: sesi Postgres Supabase menolak
+  -- UPDATE/DELETE tanpa WHERE (SQLSTATE 21000).
   update public.candidates
-     set votes = 0;
+     set votes = 0
+   where votes <> 0;
 
   update public.students
-     set has_voted = false, voted_at = null, receipt_id = null, candidate_chosen = null;
+     set has_voted = false, voted_at = null, receipt_id = null, candidate_chosen = null
+   where has_voted
+      or voted_at is not null
+      or receipt_id is not null
+      or candidate_chosen is not null;
 
-  delete from public.vote_logs;
+  delete from public.vote_logs
+   where id is not null;
 
   update public.settings
      set is_open = true,

@@ -9,10 +9,8 @@ import {
   TrendingUp,
   RefreshCw,
   Award,
-  Zap,
   Info
 } from 'lucide-react';
-import { simulateRandomVote, playSound } from '../services/storageService';
 
 interface RealCountDashboardProps {
   candidates: Candidate[];
@@ -33,8 +31,6 @@ export const RealCountDashboard: React.FC<RealCountDashboardProps> = ({
   currentStudent,
 }) => {
   const [filterGrade, setFilterGrade] = useState<string>('all');
-  const [isSimulating, setIsSimulating] = useState(false);
-  const [simulationNote, setSimulationNote] = useState<string | null>(null);
 
   // Vote calculations
   const totalVotesCast = candidates.reduce((sum, c) => sum + c.votes, 0);
@@ -62,31 +58,6 @@ export const RealCountDashboard: React.FC<RealCountDashboardProps> = ({
       percentage,
     };
   });
-
-  const handleSimulateOneVote = async () => {
-    setIsSimulating(true);
-    playSound('click');
-    const result = await simulateRandomVote();
-    if (result.success && result.studentName) {
-      setSimulationNote(`Suara simulasi berhasil: ${result.studentName} memilih Paslon No. ${result.candidateNumber}`);
-      setTimeout(() => setSimulationNote(null), 4000);
-    } else {
-      setSimulationNote(result.message);
-      setTimeout(() => setSimulationNote(null), 3000);
-    }
-    setIsSimulating(false);
-  };
-
-  const handleSimulateBatchVotes = async () => {
-    setIsSimulating(true);
-    for (let i = 0; i < 4; i++) {
-      await simulateRandomVote();
-      await new Promise((resolve) => setTimeout(resolve, 280));
-    }
-    setIsSimulating(false);
-    setSimulationNote('4 Suara simulasi baru berhasil dimasukkan ke sistem!');
-    setTimeout(() => setSimulationNote(null), 4000);
-  };
 
   // Compute SVG Donut Chart Coordinates
   const radius = 72;
@@ -336,37 +307,6 @@ export const RealCountDashboard: React.FC<RealCountDashboardProps> = ({
               );
             })}
           </div>
-
-          {/* Quick Real Count Simulation Bar for User Testing */}
-          <div className="bg-slate-100/90 rounded-xl p-4 border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
-            <div className="flex items-center gap-2 text-slate-700">
-              <Zap className="w-4 h-4 text-amber-600 shrink-0" />
-              <span>
-                <strong>Mode Pengujian Cepat:</strong> Masukkan suara simulasi untuk menguji pembaruan grafik secara instan.
-              </span>
-            </div>
-            <div className="flex items-center gap-2 shrink-0">
-              <button
-                onClick={handleSimulateOneVote}
-                disabled={isSimulating}
-                className="px-3 py-1.5 bg-white hover:bg-slate-50 text-slate-800 font-semibold rounded-lg border border-slate-300 shadow-2xs transition-colors disabled:opacity-50"
-              >
-                +1 Suara Simulasi
-              </button>
-              <button
-                onClick={handleSimulateBatchVotes}
-                disabled={isSimulating}
-                className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-2xs transition-colors disabled:opacity-50"
-              >
-                +4 Suara Beruntun
-              </button>
-            </div>
-          </div>
-          {simulationNote && (
-            <div className="text-xs text-blue-700 bg-blue-50 border border-blue-200 p-2.5 rounded-lg animate-fade-in font-medium">
-              {simulationNote}
-            </div>
-          )}
         </div>
 
         {/* Right Column: Donut Visualizer & Live Stream (5 cols) */}

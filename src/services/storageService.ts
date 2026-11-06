@@ -360,39 +360,6 @@ export const submitVote = async (
   return result;
 };
 
-export const simulateRandomVote = async (): Promise<{
-  success: boolean;
-  message: string;
-  studentName?: string;
-  candidateNumber?: number;
-}> => {
-  const settings = await getSettings();
-  if (!settings || !settings.isOpen) {
-    return { success: false, message: 'Pemilihan sedang ditutup.' };
-  }
-
-  const students = await getStudents();
-  const nonVoters = students.filter((s) => !s.hasVoted);
-  if (nonVoters.length === 0) {
-    return { success: false, message: 'Semua siswa di DPT sudah menggunakan hak suara (100% partisipasi).' };
-  }
-
-  const randomStudent = nonVoters[Math.floor(Math.random() * nonVoters.length)];
-  const candidates = await getCandidates();
-  if (candidates.length === 0) {
-    return { success: false, message: 'Belum ada pasangan calon yang terdaftar.' };
-  }
-  const randomCandidate = candidates[Math.floor(Math.random() * candidates.length)];
-
-  const res = await submitVote(randomStudent.nis, randomCandidate.id);
-  return {
-    success: res.success,
-    message: res.message,
-    studentName: randomStudent.name,
-    candidateNumber: randomCandidate.number,
-  };
-};
-
 // ---------------------------------------------------------------------------
 // OPERASI PANITIA
 // ---------------------------------------------------------------------------
@@ -465,15 +432,28 @@ export const regenerateAllTokens = async (): Promise<void> => {
   }
 };
 
-export const resetAllData = async (): Promise<void> => {
-  if (!isSupabaseConfigured) return;
-  const { data } = await supabase.rpc('admin_reset_data');
-  const result = data as { success: boolean } | null;
-  if (result?.success) {
-    cachedStudent = null;
-    emitDataChange();
-    emitUserChange();
+export const resetAllData = async (): Promise<{ success: boolean; message: string }> => {
+  if (!isSupabaseConfigured) {
+    return { success: false, message: 'Sistem belum terhubung ke database Supabase.' };
   }
+
+  const { data, error } = await supabase.rpc('admin_reset_data');
+  if (error || !data) {
+    playSound('alert');
+    return { success: false, message: 'Gagal mereset data di server. Periksa koneksi lalu coba lagi.' };
+  }
+
+  const result = data as { success: boolean; message?: string };
+  if (!result.success) {
+    playSound('alert');
+    return { success: false, message: result.message ?? 'Reset data ditolak oleh server.' };
+  }
+
+  cachedStudent = null;
+  emitDataChange();
+  emitUserChange();
+  playSound('vote-success');
+  return { success: true, message: result.message ?? 'Seluruh hasil pemilihan berhasil direset.' };
 };
 
 // ---------------------------------------------------------------------------
