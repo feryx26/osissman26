@@ -108,15 +108,6 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
     }
   };
 
-  const handleQuickDemoLogin = async () => {
-    setUsernameInput('admin');
-    setPasswordInput('osis2026');
-    const res = await loginAdmin('admin', 'osis2026');
-    if (res.success) {
-      setIsAuthenticated(true);
-    }
-  };
-
   const handleAdminLogout = async () => {
     await logoutAdmin();
     setIsAuthenticated(false);
@@ -256,18 +247,11 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
             </button>
           </form>
 
-          {/* Quick Demo Login Helper */}
+          {/* Info akun panitia default */}
           <div className="pt-4 border-t border-slate-100 text-center space-y-2">
             <span className="text-[11px] text-slate-400 block">
               Akun Panitia Default: <strong>admin</strong> / sandi: <strong>osis2026</strong>
             </span>
-            <button
-              type="button"
-              onClick={handleQuickDemoLogin}
-              className="w-full py-2 px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition-colors cursor-pointer"
-            >
-              Klik di Sini untuk Login Cepat (Demo)
-            </button>
           </div>
         </div>
 
