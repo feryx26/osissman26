@@ -1,0 +1,6 @@
+{
+  "name": "E-Pilketos OSIS - Pemilihan Ketua OSIS & Real Count",
+  "description": "Aplikasi e-voting pemilihan Ketua dan Wakil Ketua OSIS berbasis web dengan autentikasi NIS siswa, bilik suara digital, dan live real count otomatis.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
