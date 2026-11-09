@@ -440,7 +440,10 @@ export const resetAllData = async (): Promise<{ success: boolean; message: strin
   const { data, error } = await supabase.rpc('admin_reset_data');
   if (error || !data) {
     playSound('alert');
-    return { success: false, message: 'Gagal mereset data di server. Periksa koneksi lalu coba lagi.' };
+    return {
+      success: false,
+      message: `Gagal mereset data di server: ${error?.message ?? 'server tidak mengirim respons'}.`,
+    };
   }
 
   const result = data as { success: boolean; message?: string };
