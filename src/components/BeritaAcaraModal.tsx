@@ -182,7 +182,7 @@ export const BeritaAcaraModal: React.FC<BeritaAcaraModalProps> = ({
               <div className="space-y-12">
                 <p>Ketua Panitia KPU,</p>
                 <div>
-                  <p className="font-bold underline">Fajar Maulana, S.Pd.</p>
+                  <p className="font-bold underline">Dani, S.Pd.</p>
                   <p className="text-[10px] text-slate-500">NIP. 19850412 201001 1 012</p>
                 </div>
               </div>
@@ -190,16 +190,16 @@ export const BeritaAcaraModal: React.FC<BeritaAcaraModalProps> = ({
               <div className="space-y-12">
                 <p>Pembina OSIS,</p>
                 <div>
-                  <p className="font-bold underline">Dra. Hj. Nurjanah, M.Pd.</p>
-                  <p className="text-[10px] text-slate-500">NIP. 19720815 199802 2 001</p>
+                  <p className="font-bold underline">LUCY ARYANI, S.E </p>
+                  <p className="text-[10px] text-slate-500">NIP. 197406122014102001</p>
                 </div>
               </div>
 
               <div className="space-y-12">
                 <p>Kepala Sekolah,</p>
                 <div>
-                  <p className="font-bold underline">Dr. H. Bambang Subagyo, M.M.</p>
-                  <p className="text-[10px] text-slate-500">NIP. 19681120 199403 1 004</p>
+                  <p className="font-bold underline">Hj. YETI SURTINI, S.Pd., M.Pd.</p>
+                  <p className="text-[10px] text-slate-500">NIP. 196801141991032005</p>
                 </div>
               </div>
             </div>
