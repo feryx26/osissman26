@@ -224,22 +224,22 @@ export const downloadBeritaAcaraHtml = (
       <div class="sign-box">
         <p>Ketua Panitia KPU,</p>
         <div class="sign-space"></div>
-        <p class="sign-name">Fajar Maulana, S.Pd.</p>
+        <p class="sign-name">Dani, S.Pd.</p>
         <p style="font-size: 10px; color: #64748b; margin: 0;">NIP. 19850412 201001 1 012</p>
       </div>
 
       <div class="sign-box">
         <p>Pembina OSIS,</p>
         <div class="sign-space"></div>
-        <p class="sign-name">Dra. Hj. Nurjanah, M.Pd.</p>
-        <p style="font-size: 10px; color: #64748b; margin: 0;">NIP. 19720815 199802 2 001</p>
+        <p class="sign-name">LUCY ARYANI, S.E</p>
+        <p style="font-size: 10px; color: #64748b; margin: 0;">NIP. 197406122014102001</p>
       </div>
 
       <div class="sign-box">
         <p>Kepala Sekolah,</p>
         <div class="sign-space"></div>
-        <p class="sign-name">Dr. H. Bambang Subagyo, M.M.</p>
-        <p style="font-size: 10px; color: #64748b; margin: 0;">NIP. 19681120 199403 1 004</p>
+        <p class="sign-name">Hj. YETI SURTINI, S.Pd., M.Pd.</p>
+        <p style="font-size: 10px; color: #64748b; margin: 0;">NIP. 196801141991032005</p>
       </div>
     </div>
 
